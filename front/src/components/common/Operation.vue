@@ -1,5 +1,30 @@
 <template>
   <section class="bg-primary">
+    <Modal v-model="modalVisible" @confirm="confirmCreation" @cancel="cancelCreation" name="algo">
+      <template v-slot:title>Criar componente fotovoltaico</template>
+      <div class="grid grid-cols-2 gap-4">
+        <div class="flex flex-col">
+          <label for="gtim" class="mb-2">Nome</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+          <label for="gtim" class="mb-2">GTIM</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+          <label for="gtim" class="mb-2">Segmento</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+          <label for="gtim" class="mb-2">Grupo</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+        </div>
+        <div class="flex flex-col">
+          <label for="gtim" class="mb-2">Nome</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+          <label for="gtim" class="mb-2">GTIM</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+          <label for="gtim" class="mb-2">Segmento</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+          <label for="gtim" class="mb-2">Grupo</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+        </div>
+      </div>
+    </Modal>
     <div class="flex justify-center py-20">
       <div class="w-9/12 text-center flex flex-col items-center">
         <h2 class="text-2xl text-white font-bold mb-2">Lista de componentes</h2>
@@ -9,7 +34,7 @@
             <input v-model="filtred" type="text" class="w-full p-1 rounded-md mr-4" placeholder="Pesquiser por nome ou grupo...">
           </div>
           <div class="w-2/12 ml-4">
-            <button class="bg-white text-green-600 py-1 px-2 rounded-md text-md w-full">Criar</button>
+            <button class="bg-white text-green-600 py-1 px-2 rounded-md text-md w-full" @click="create">Criar</button>
           </div>
         </div>
         <div v-if="componentsBySearch.length" class="mt-8 text-left bg-white rounded-lg p-2 w-full">
@@ -45,12 +70,18 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, watch, toRefs } from 'vue'
+import { computed, ref, inject } from 'vue'
 import * as mocks from '../../mocks'
+import Modal from './Modal.vue'
 
 export default {
+  components: {
+    Modal
+  },
   setup() {
     const filtred = ref('');
+    const modalVisible = ref(false);
+    const $vfm = inject('$vfm')
 
     const components = mocks.components;
     const componentsBySearch = computed(() => components.filter((el) => 
@@ -58,6 +89,18 @@ export default {
       || el.group.toLowerCase().includes(filtred.value.toLowerCase())
     ));    
     const componentsFiltred = computed(() => !filtred.value ? components : componentsBySearch.value);
+
+    const create = () => {
+      modalVisible.value = true;
+    }
+
+    const confirmCreation = () => {
+      console.log('confirma');
+    }
+
+    const cancelCreation = () => {
+      modalVisible.value = false;
+    }
 
     const edit = (component) => {
 
@@ -72,8 +115,12 @@ export default {
       componentsFiltred,
       componentsBySearch,
       filtred,
+      modalVisible,
+      confirmCreation,
+      cancelCreation,
       edit,
-      remove
+      remove,
+      create
     }
   },
 }
