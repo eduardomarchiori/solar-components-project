@@ -1,8 +1,21 @@
 import axios from "axios";
+import { getCookie, hasCookie } from '../common/cookie'
 
-export const api = axios.create({
-  baseURL: 'https://4bdn8u070f.execute-api.us-east-1.amazonaws.com',
-  headers: {
-    'Content-Type': 'application/json'
+const config = () => {
+
+  const headers = {};
+
+  if(hasCookie('accessToken')){
+    headers['x-authorization'] = getCookie('accessToken');
   }
-})
+
+  return axios.create({
+    baseURL: 'http://localhost:5003',
+    headers: {
+      'Content-Type': 'application/json',
+      ...headers
+    }
+  })
+}
+
+export const api = config();

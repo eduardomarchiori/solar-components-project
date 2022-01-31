@@ -12,9 +12,9 @@
             Home
           </RouterLink>
         </div>
-        <button v-if="!isLogged" @click="signin" class="ml-4 bg-tertiary px-4 py-1 rounded-md">
+        <RouterLink to="/signin" v-if="!isLogged" class="ml-4 bg-tertiary px-4 py-1 rounded-md">
           Entrar
-        </button>
+        </RouterLink>
         <button v-else @click="signout" class="ml-4 bg-primary px-4 py-1 rounded-md text-white">
           Sair
         </button>
@@ -24,16 +24,24 @@
 </template>
 
 <script>
+import { computed, ref, onMounted, watch, toRefs } from 'vue'
+import { removeCookie } from '../../services/common/cookie';
+import useAuth from '../../use/useAuth';
+import { useRouter } from 'vue-router';
+
 export default {
-  data: () => ({
-    isLogged: true
-  }),
-  methods: {
-    signout(){
+  setup(){
+    const { isLogged } = useAuth();
+    const router = useRouter();
 
-    },
-    signin(){
+    const signout = () => {
+      removeCookie('accessToken');
+      router.push({ name: 'Signin' });
+    }
 
+    return { 
+      signout,
+      isLogged
     }
   }
 }

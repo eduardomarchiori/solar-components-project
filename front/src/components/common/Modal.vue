@@ -11,8 +11,8 @@
       <slot v-bind:params="params"></slot>
     </div>
     <div class="flex-shrink-0 flex justify-center items-center pt-4 mt-8">
-      <button class="vfm-btn mr-4" @click="$emit('confirm', close)">Criar</button>
-      <button class="vfm-btn" @click="$emit('cancel', close)">Cancelar</button>
+      <button class="bg-green-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="$emit('confirm', close)">Criar</button>
+      <button class="bg-red-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="$emit('cancel', close)">Cancelar</button>
     </div>
   </vue-final-modal>
 </template>

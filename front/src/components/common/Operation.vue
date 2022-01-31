@@ -4,6 +4,7 @@
       <template v-slot:title>Criar componente fotovoltaico</template>
       <div class="grid grid-cols-2 gap-4">
         <div class="flex flex-col">
+          <p class="mb-4"><b>Dados Gerais</b></p>
           <label for="gtim" class="mb-2">Nome</label>
           <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
           <label for="gtim" class="mb-2">GTIM</label>
@@ -11,16 +12,20 @@
           <label for="gtim" class="mb-2">Segmento</label>
           <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
           <label for="gtim" class="mb-2">Grupo</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+          <p class="my-4"><b>Pesos</b></p>
+          <label for="gtim" class="mb-2">Peso Bruto</label>
+          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
+          <label for="gtim" class="mb-2">Peso Líquido</label>
           <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
         </div>
         <div class="flex flex-col">
-          <label for="gtim" class="mb-2">Nome</label>
+          <p class="mb-4"><b>Dimensões Logísticas</b></p>
+          <label for="gtim" class="mb-2">Altura</label>
           <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">GTIM</label>
+          <label for="gtim" class="mb-2">Largura</label>
           <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">Segmento</label>
-          <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">Grupo</label>
+          <label for="gtim" class="mb-2">Profundidade</label>
           <input type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
         </div>
       </div>
