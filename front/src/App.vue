@@ -9,7 +9,9 @@ import Footer from './components/footer/Footer.vue'
   <div class="content">
     <Header />
       <main class="flex flex-col justify-center bg-primary">
-        <router-view />
+        <Suspense>
+          <router-view />
+        </Suspense>
       </main>
     <Footer />
   </div>

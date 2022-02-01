@@ -1,5 +1,6 @@
 import { reactive, computed } from 'vue';
-import { hasCookie } from '../services/common/cookie';
+import { hasCookie, getCookie } from '../services/common/cookie';
+import * as userService from '../services/user/userService';
 
 const state = reactive({
   user: {
@@ -12,7 +13,13 @@ const state = reactive({
   }
 });
 
-export default function useAuth() { 
+export default function useAuth() {
+
+  const getUser = async () => {
+    const response = await userService.getUser();
+    setUser(response.user);
+  }
+
   const setUser = (params) => {
     state.user = { ...params };
   }
@@ -41,6 +48,7 @@ export default function useAuth() {
     isLogged,
     setLoggin,
     setUser,
+    getUser,
     clearState
   }
 }

@@ -2,10 +2,10 @@ const authService = require('../services/authService')
 
 const signup = async (req, res, next) => {
   const { email = '', name = '', password = '' } = req.body;
-  console.log(`Name: ${name}, Email: ${email}, Senha: ${password}`);
 
   try {
     await authService.signup({ name, email, password });
+    console.log(`Usuário ${email} criado com sucesso.`);
     res.sendStatus(201);
     next();
   } catch(e) {
@@ -20,7 +20,7 @@ const signin = async (req, res, next) => {
   
   try {
     const response = await authService.singin({ email, password });
-    console.log(response);
+    console.log(`Sessão do usuário ${email} iniciada com sucesso.`);
     res.json(response);
     next()
   } catch(e) {

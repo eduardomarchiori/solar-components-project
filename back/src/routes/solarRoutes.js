@@ -1,15 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const solarController = require('../controllers/solarController');
+const authMiddleware = require('../middlewares/authMiddleware');
 
-router.get('/solar-component', solarController.getSolarComponents);
+router.post('/solar-component/calculate', authMiddleware.verifyJWT, solarController.calculateCubage);
 
-router.get('/solar-component/:id', solarController.getSolarComponents);
+router.get('/solar-component', authMiddleware.verifyJWT, solarController.getSolarComponents);
 
-router.post('/solar-component', solarController.createSolarComponent);
+// router.get('/solar-component/:id', solarController.getSolarComponent);
 
-router.put('/solar-component', solarController.updateSolarComponent);
+router.post('/solar-component', authMiddleware.verifyJWT, solarController.createSolarComponent);
 
-router.delete('/solar-component/:id', solarController.deleteSolarComponent);
+router.put('/solar-component', authMiddleware.verifyJWT, solarController.updateSolarComponent);
+
+router.delete('/solar-component/:id', authMiddleware.verifyJWT, solarController.deleteSolarComponent);
 
 module.exports = router;

@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const userService = require('./userService');
 
 const singin = async ({ email, password }) => {
-  const [ user ] = await userService.getUser({ email });
+  const user = await userService.getUser({ email });
 
   if(!user) return Promise.reject(Error('User not found.'));
 
@@ -16,8 +16,15 @@ const singin = async ({ email, password }) => {
     return Promise.reject(Error('User invalid.'));
   }
 
-  const accessToken = jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 50000});
-  return { accessToken }
+  const accessToken = jwt.sign({ email, userId: user['user_id'] }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 50000});
+  return { 
+    accessToken, 
+    user: { 
+      userId: user['user_id'],
+      name: user.name,
+      email: user.email
+    }
+  }
 }
 
 const signup = async ({ name, email, password }) => {

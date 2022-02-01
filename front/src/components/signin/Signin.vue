@@ -15,11 +15,13 @@ import { computed, ref, onMounted, watch, toRefs } from 'vue';
 import * as authenticationService from '../../services/authentication/authenticationService';
 import { setCookie } from '../../services/common/cookie';
 import { useRouter } from 'vue-router';
+import useAuth from '../../use/useAuth';
 
 export default {
   setup(props, context) {
 
     const router = useRouter();
+    const { setUser } = useAuth();
 
     onMounted(() => {
       context.emit('change-bg', 'bg-primary')
@@ -34,7 +36,13 @@ export default {
           email: email.value, 
           password: password.value
         });
-        setCookie(response);
+        setCookie({ accessToken: response.accessToken });
+        setUser({ 
+          id: response.user.userId,
+          name: response.user.name,
+          email: response.user.email,
+        });
+        
         router.push({name: 'Home'});
       } catch (error) {
         console.log(error);

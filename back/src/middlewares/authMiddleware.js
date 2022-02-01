@@ -6,6 +6,7 @@ const verifyJWT = (req, res, next) => {
     if(err) return res.status(401).end();
 
     req.email = decoded.email;
+    req.userId = decoded.userId;
     next();
   })
 }
