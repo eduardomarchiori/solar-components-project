@@ -27,15 +27,15 @@ A aplicação deve respeitar os seguintes requisitos técnicos:
 
 ## Variáveis de Ambiente
 
-Para rodar esse projeto, você vai precisar adicionar a seguinte variável de ambiente no seu .env da pasta back
+Para rodar esse projeto, você vai precisar adicionar a seguinte variável de ambiente no seu ```.env``` da pasta back
 
 `ACCESS_TOKEN_SECRET`
 
 ## Ambiente testado
 
-Sistema operacional: Linux e Windows
+**Sistema operacional:** Linux e Windows
 
-Navegador: Google Chrome e Edge
+**Navegador:** Google Chrome e Edge
 
 ## Para rodar Localmente
 
@@ -73,10 +73,12 @@ Em outro terminal, entre na pasta back
 Suba a instancia do banco de dados
 
 ```bash
-  Linux
+  --Linux
   sudo docker-compose up
+  
   ou
-  Windows
+  
+  --Windows
   docker-compose up
 ```
 
