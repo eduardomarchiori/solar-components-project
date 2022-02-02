@@ -21,7 +21,7 @@ A aplicação deve respeitar os seguintes requisitos técnicos:
 
 ## Programas necessários
 
-- Node/NPM
+- Node (versão utilizada 16.13.2)
 - Docker
 - docker-compose
 
@@ -30,6 +30,10 @@ A aplicação deve respeitar os seguintes requisitos técnicos:
 Para rodar esse projeto, você vai precisar adicionar a seguinte variável de ambiente no seu .env da pasta back
 
 `ACCESS_TOKEN_SECRET`
+
+## Ambiente testado
+Sistema operacional: Linux e Windows
+Navegador: Google Chrome e Edge
 
 ## Para rodar Localmente
 
@@ -67,7 +71,11 @@ Em outro terminal, entre na pasta back
 Suba a instancia do banco de dados
 
 ```bash
+  Linux
   sudo docker-compose up
+  ou
+  Windows
+  docker-compose up
 ```
 
 Novamente, em outro terminal, entre na pasta back
