@@ -7,8 +7,6 @@ router.post('/solar-component/calculate', authMiddleware.verifyJWT, solarControl
 
 router.get('/solar-component', authMiddleware.verifyJWT, solarController.getSolarComponents);
 
-// router.get('/solar-component/:id', solarController.getSolarComponent);
-
 router.post('/solar-component', authMiddleware.verifyJWT, solarController.createSolarComponent);
 
 router.put('/solar-component', authMiddleware.verifyJWT, solarController.updateSolarComponent);

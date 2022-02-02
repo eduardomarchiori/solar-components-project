@@ -1,5 +1,6 @@
 <template>
-  <section class="bg-gray-200">
+  <section class="bg-green-100">
+    <Toaster :toaster="toaster" />
     <div class="flex justify-center py-20">
       <div class="w-9/12 text-center flex flex-col items-center">
         <h2 class="text-2xl color-primary font-bold mb-2">Calculadora</h2>
@@ -32,7 +33,11 @@
           </div>
           <div class="flex">
             <div>
-              <button class="bg-white text-green-600 mr-4 rounded-md text-md w-40 h-32 hover:bg-green-500 hover:text-white" @click="calculate">Calcular</button>
+              <button 
+                class="bg-white text-green-600 mr-4 rounded-md text-md w-40 h-32 hover:bg-green-500 hover:text-white"
+                :class="{ 'cursor-not-allowed': !isValidCalculation }"
+                :disabled="!isValidCalculation"
+                @click="calculate">Calcular</button>
             </div>
             <div class="bg-white w-full rounded-md grid grid-cols-3 gap-4">
               <div class="flex flex-col justify-center items-center">
@@ -59,10 +64,11 @@
 import { computed, onMounted, ref, inject, reactive } from 'vue'
 import * as solarService from '../../services/solar/solarService';
 import Multiselect from '@vueform/multiselect'
+import Toaster from './Toaster.vue';
 
 export default {
   components: {
-    Multiselect,
+    Multiselect, Toaster
   },
   props: {
     components: {
@@ -75,6 +81,7 @@ export default {
     const componentsSelected = ref(null);
     const multiselect = ref(null);
     const result = ref(null);
+    const toaster = ref(null);
 
     const componentsMapped = computed(() => components.values.map(({ id, name }) => ({
       label: name,
@@ -90,8 +97,13 @@ export default {
        result.value = await solarService.calculateCubage({
         components: selecteds.map(({ id, quantity }) => ({ id, quantidade: quantity }))
        });
-      } catch (error) {
-        console.log(error);
+      } catch (e) {
+        const { error, content } = e.response.data;
+        toaster.value = {
+          type: 'error',
+          title: error,
+          message: content
+        }
       }
     }
 
@@ -109,6 +121,10 @@ export default {
       });
     }
 
+    const isValidCalculation = computed(() => {
+      return componentsSelected?.value?.length;
+    });
+
     return {
       componentsSelected,
       componentsMapped,
@@ -117,7 +133,9 @@ export default {
       multiselect,
       result,
       getSelectedById,
-      clear
+      clear,
+      isValidCalculation,
+      toaster
     }
   }
 }

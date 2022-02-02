@@ -1,7 +1,7 @@
 import * as authenticationResource from './authenticationResource';
 
 export const signin = async (data) => {
-  const response = await authenticationResource.signin(data)
+  const response = await authenticationResource.signin(data);
   return response.data;
 }
 

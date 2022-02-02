@@ -1,38 +1,56 @@
 <template>
   <div>
+    <Toaster :toaster="toaster" />
     <Introduction />
-    <Operation :components="components" />
-    <Calculator :components="components" />
+    <Operation :components="components" @updateComponents="updateComponents" />
+    <Calculator :components="components" @updateComponents="updateComponents" />
   </div>
 </template>
 
 <script>
-import Introduction from '../common/Introduction.vue'
-import Operation from '../common/Operation.vue'
-import Calculator from '../common/Calculator.vue'
-import Faq from '../common/Faq.vue'
+import Introduction from '../common/Introduction.vue';
+import Operation from '../common/Operation.vue';
+import Calculator from '../common/Calculator.vue';
 import useAuth from '../../use/useAuth';
 import * as solarService from '../../services/solar/solarService';
-import { computed, onMounted, ref, inject, reactive } from 'vue'
+import { ref, reactive } from 'vue';
+import Toaster from '../common/Toaster.vue';
 
 export default {
   components: {
-    Introduction, Operation, Calculator, Faq
+    Introduction, Operation, Calculator, Toaster
   },
   async setup(){
     const { getUser, isLogged, setLoggin } = useAuth();
-    let components = reactive({ values: [] })
+    let components = reactive({ values: [] });
+    const toaster = ref(null);
 
+    const updateComponents = async () => {
+      try {        
+        const response = await solarService.getSolarComponents();
+        components.values = response.solarComponents;
+      } catch (e) {
+        const { error, content } = e.response.data
+        toaster.value = {
+          type: 'error',
+          title: error,
+          message: content
+        }
+      }
+    }
+
+    setLoggin();
     if(isLogged.value){
       setLoggin();
       await getUser();
 
-      const response = await solarService.getSolarComponents();
-      components.values = response.solarComponents;
+      updateComponents();
     }
 
     return {
-      components
+      components,
+      updateComponents,
+      toaster
     }
   }
 }

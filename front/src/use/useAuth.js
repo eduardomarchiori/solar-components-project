@@ -37,7 +37,6 @@ export default function useAuth() {
 
   const setLoggin = () => {
     state.isLogged = hasCookie('accessToken');
-    console.log(state.isLogged);
   }
 
   const user = computed(() => state.user);

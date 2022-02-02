@@ -1,6 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
 import useAuth from "../use/useAuth";
-import { getCookie } from "../services/common/cookie";
 import Home from "../components/home/Home.vue";
 import Signin from "../components/signin/Signin.vue";
 import Signup from "../components/signup/Signup.vue";
@@ -43,10 +42,9 @@ router.beforeEach(async (to, from, next) => {
   setLoggin();
 
   const { name } = to;
-  console.log(to);
 
-  if (!isWhiteListedRoute(name) && !isLogged.value) next({ name: 'Signin' })
-  if (isWhiteListedRoute(name) && isLogged.value) next({ name: 'Home' })
+  if (!isWhiteListedRoute(name) && !isLogged.value) next({ name: 'Signin' });
+  if (isWhiteListedRoute(name) && isLogged.value) next({ name: 'Home' });
   next();
 });
 

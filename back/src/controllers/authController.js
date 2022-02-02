@@ -1,4 +1,5 @@
-const authService = require('../services/authService')
+const authService = require('../services/authService');
+const errorsService = require('../services/errorsService');
 
 const signup = async (req, res, next) => {
   const { email = '', name = '', password = '' } = req.body;
@@ -10,7 +11,7 @@ const signup = async (req, res, next) => {
     next();
   } catch(e) {
     console.log(e.message);
-    res.sendStatus(500) && next(e);
+    res.status(500).send(errorsService.getError(e.message)) && next(e);
   }
 }
 
@@ -22,10 +23,10 @@ const signin = async (req, res, next) => {
     const response = await authService.singin({ email, password });
     console.log(`Sessão do usuário ${email} iniciada com sucesso.`);
     res.json(response);
-    next()
+    next();
   } catch(e) {
     console.log(e.message);
-    res.sendStatus(500) && next(e);
+    res.status(500).send(errorsService.getError(e.message)) && next(e);
   }
 }
 

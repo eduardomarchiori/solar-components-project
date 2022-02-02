@@ -2,13 +2,11 @@
   <header class="flex justify-center">
     <div class="flex justify-between w-8/12 my-4">
       <div>
-        <RouterLink to="/">
-          <img src="../../assets/images/logo.png" class="w-auto h-8 rounded-lg"/>
-        </RouterLink>
+        <img src="../../assets/images/logo.png" class="w-auto h-12 rounded-lg mb-1"/>
       </div>
       <div class="flex items-center">
         <div class="mx-2">
-          <RouterLink to="/">
+          <RouterLink v-if="isLogged" to="/">
             Home
           </RouterLink>
         </div>
@@ -24,18 +22,18 @@
 </template>
 
 <script>
-import { computed, ref, onMounted, watch, toRefs } from 'vue'
 import { removeCookie } from '../../services/common/cookie';
 import useAuth from '../../use/useAuth';
 import { useRouter } from 'vue-router';
 
 export default {
   setup(){
-    const { isLogged } = useAuth();
+    const { isLogged, clearState } = useAuth();
     const router = useRouter();
 
     const signout = () => {
       removeCookie('accessToken');
+      clearState();
       router.push({ name: 'Signin' });
     }
 

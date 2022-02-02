@@ -1,42 +1,23 @@
 <template>
   <section class="bg-primary">
-    <Modal 
-      v-model="modalVisible" 
+    <ModalViewSolar :component="componentsSelected" @cancel="cancelVisualization" :isVisualization="isVisualization" />
+    <ModalCreateEditSolar
+      v-model:name="name"
+      v-model:gtim="gtim"
+      v-model:sector="sector"
+      v-model:group="group"
+      v-model:grossWeight="grossWeight"
+      v-model:netWeight="netWeight"
+      v-model:height="height"
+      v-model:width="width"
+      v-model:depth="depth"
       @confirm="confirmCreation" 
       @cancel="cancelCreation" 
       @edit="editComponent" 
-      @cancel-edit="cancelEditionComponent" 
-      name="algo"
-      :isEdition="isEdition">
-      <template v-slot:title>Criar componente fotovoltaico</template>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="flex flex-col">
-          <p class="mb-4"><b>Dados Gerais</b></p>
-          <label for="gtim" class="mb-2">Nome</label>
-          <input type="text" v-model="name" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">GTIM</label>
-          <input type="text" v-model="gtim" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">Segmento</label>
-          <input type="text" v-model="sector" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">Grupo</label>
-          <input type="text" v-model="group" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <p class="my-4"><b>Pesos</b></p>
-          <label for="gtim" class="mb-2">Peso Bruto</label>
-          <input type="text" v-model="grossWeight" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">Peso Líquido</label>
-          <input type="text" v-model="netWeight" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-        </div>
-        <div class="flex flex-col">
-          <p class="mb-4"><b>Dimensões Logísticas</b></p>
-          <label for="gtim" class="mb-2">Altura</label>
-          <input type="text" v-model="height" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">Largura</label>
-          <input type="text" v-model="width" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-          <label for="gtim" class="mb-2">Profundidade</label>
-          <input type="text" v-model="depth" class="mb-2 bg-gray-100 py-1 px-2 rounded-md w-min">
-        </div>
-      </div>
-    </Modal>
+      @cancel-edit="cancelEditionComponent"
+      :isEdition="isEdition"
+      :modalVisible="modalVisible" />
+    <Toaster :toaster="toaster" />
     <div class="flex justify-center py-20">
       <div class="w-9/12 text-center flex flex-col items-center">
         <h2 class="text-2xl text-white font-bold mb-2">Lista de componentes</h2>
@@ -68,8 +49,15 @@
               <span>{{component.group}}</span>
             </div>
             <div class="w-4/12 text-right">
-              <button class="bg-blue-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="edit(component)">Editar</button>
-              <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.id)">Excluir</button>
+              <button class="bg-green-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="view(component)">
+                <fa-icon icon="eye"/>
+              </button>
+              <button class="bg-blue-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="edit(component)">
+                <fa-icon icon="pencil-alt"/>
+              </button>
+              <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.id)">
+                <fa-icon icon="trash-alt"/>
+              </button>
             </div>
           </div>
         </div>
@@ -83,15 +71,17 @@
 </template>
 
 <script>
-import { computed, onMounted, ref, inject, reactive } from 'vue'
-import * as mocks from '../../mocks'
-import Modal from './Modal.vue'
+import { computed, onMounted, ref, inject, reactive } from 'vue';
+import Toaster from './Toaster.vue';
 import * as solarService from '../../services/solar/solarService';
-import useAuth from '../../use/useAuth';
+import ModalViewSolar from '../solar/ModalViewSolar.vue';
+import ModalCreateEditSolar from '../solar/ModalCreateEditSolar.vue';
 
 export default {
   components: {
-    Modal
+    ModalViewSolar,
+    ModalCreateEditSolar,
+    Toaster
   },
   props: {
     components: {
@@ -99,26 +89,28 @@ export default {
       required: true
     }
   },
-  async setup(props) {
+  async setup(props, { emit }) {
     
-    const { user } = useAuth();
     const components = props.components;
-    
+
     const solarComponentId = ref('');
     const logisticDimensionId = ref('');    
-    const name = ref('');
-    const gtim = ref('');
-    const sector = ref('');
-    const group = ref('');
-    const grossWeight = ref('');
-    const netWeight = ref('');
-    const height = ref('');
-    const width = ref('');
-    const depth = ref('');
+    const name = ref(null);
+    const gtim = ref(null);
+    const sector = ref('ongrid');
+    const group = ref('perfil');
+    const grossWeight = ref(null);
+    const netWeight = ref(null);
+    const height = ref(null);
+    const width = ref(null);
+    const depth = ref(null);
+    const componentsSelected = ref({});
 
     const filtred = ref('');
     const modalVisible = ref(false);
     const isEdition = ref(false);
+    const isVisualization = ref(false);
+    const toaster = ref(null);
 
     const componentsBySearch = computed(() => components.values.filter((el) => 
       el.name.toLowerCase().includes(filtred.value.toLowerCase()) 
@@ -144,16 +136,26 @@ export default {
           depth: +depth.value,
         });
 
-        const response = await solarService.getSolarComponents();
-        components.values = response.solarComponents;
-
+        emit('update-components');
+        clearInputComponents();
+        toaster.value = {
+          type: 'success',
+          title: 'Sucesso',
+          message: 'Componente criado com sucesso.'
+        }
         modalVisible.value = false;
-      } catch (error) {
-        console.log(error);
+      } catch (e) {
+        const { error, content } = e.response.data;
+        toaster.value = {
+          type: 'error',
+          title: error,
+          message: content
+        }
       }
     }
 
     const cancelCreation = () => {
+      clearInputComponents();
       modalVisible.value = false;
     }
 
@@ -190,13 +192,22 @@ export default {
           depth: +depth.value,
         })
 
-        const response = await solarService.getSolarComponents();
-        components.values = response.solarComponents;
+        emit('update-components');
         clearInputComponents();
+        toaster.value = {
+          type: 'success',
+          title: 'Sucesso',
+          message: 'Componente alterado com sucesso.'
+        }
         isEdition.value = false;
         modalVisible.value = false;
-      } catch (error) {
-        console.log(error);
+      } catch (e) {
+        const { error, content } = e.response.data;
+        toaster.value = {
+          type: 'error',
+          title: error,
+          message: content
+        }
       }
     }
 
@@ -208,29 +219,46 @@ export default {
     }
 
     const clearInputComponents = () => {
-      solarComponentId.value = "";
-      logisticDimensionId.value = "";
-      name.value = "";
-      gtim.value = "";
-      sector.value = "";
-      group.value = "";
-      grossWeight.value = "";
-      netWeight.value = "";
-      height.value = "";
-      width.value = "";
-      depth.value = "";
+      solarComponentId.value = null;
+      logisticDimensionId.value = null;
+      name.value = null;
+      gtim.value = null;
+      sector.value = 'ongrid';
+      group.value = 'perfil';
+      grossWeight.value = null;
+      netWeight.value = null;
+      height.value = null;
+      width.value = null;
+      depth.value = null;
     }
     
 
     const remove = async (solarComponentId) => {
       try {      
         await solarService.deleteSolarComponent({ solarComponentId })
-        const response = await solarService.getSolarComponents();
-        components.values = response.solarComponents;
-
-      } catch (error) {
-        console.log(error);
+        toaster.value = {
+          type: 'success',
+          title: 'Sucesso',
+          message: 'Componente excluído com sucesso.'
+        }
+        emit('update-components');
+      } catch (e) {
+        const { error, content } = e.response.data;
+        toaster.value = {
+          type: 'error',
+          title: error,
+          message: content
+        }
       }
+    }
+
+    const cancelVisualization = () => {
+      isVisualization.value = false;
+    }
+
+    const view = (component) => {
+      componentsSelected.value = component;
+      isVisualization.value = true;
     }
 
     return {
@@ -246,16 +274,21 @@ export default {
       components,
       componentsFiltred,
       componentsBySearch,
+      componentsSelected,
       filtred,
       modalVisible,
       isEdition,
+      isVisualization,
+      toaster,
       confirmCreation,
       cancelCreation,
       cancelEditionComponent,
+      cancelVisualization,
       editComponent,
       edit,
       remove,
       create,
+      view
     }
   },
 }

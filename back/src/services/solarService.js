@@ -3,6 +3,10 @@ var uuid = require('uuid');
 
 const calculateCubage = async (components) => {
 
+  if(!hasValidSolarInput({ components })){
+    return Promise.reject(Error('Invalid cubage inputs'));
+  }
+
   let cubage = 0;
   let totalGrossWeight = 0;
   let totalNetWeight = 0;
@@ -26,7 +30,6 @@ const calculateCubage = async (components) => {
     pesoBruto: totalGrossWeight,
     pesoLiquido: totalNetWeight
   });
-
 };
 
 const createSolarComponent = async ({
@@ -42,12 +45,27 @@ const createSolarComponent = async ({
   depth
  }) => {
 
+  if(!hasValidSolarInput({
+    userId,
+    name, 
+    gtim,
+    sector,
+    group,
+    grossWeight,
+    netWeight,
+    height,
+    width,
+    depth
+  })){
+    return Promise.reject(Error('Invalid creation component inputs'));
+  }
+
   const logisticDimensionId = uuid.v4();
 
   try {
-    await solarData.createLogisticsDimensionsSolarComponent({ logisticDimensionId, height, width, depth })
+    await solarData.createLogisticsDimensionsSolarComponent({ logisticDimensionId, height, width, depth });
   } catch (error) {
-    return Promise.reject(Error('Logistic dimension invalid.'));
+    return Promise.reject(Error('Logistic dimension creation invalid'));
   }
 
   return solarData.createSolarComponent({
@@ -78,13 +96,28 @@ const updateSolarComponent = async ({
   width,
   depth
 }) => {
-  
 
+  if(!hasValidSolarInput({
+    solarComponentId,
+    logisticDimensionId,
+    name, 
+    gtim,
+    sector,
+    group,
+    grossWeight,
+    netWeight,
+    height,
+    width,
+    depth
+  })){
+    return Promise.reject(Error('Invalid update component inputs'));
+  }
+  
   try {
-    await solarData.updateLogisticsDimensionsSolarComponents({ logisticDimensionId, height, width, depth })
+    await solarData.updateLogisticsDimensionsSolarComponents({ logisticDimensionId, height, width, depth });
   } catch (error) {
     console.log(error.message);
-    return Promise.reject(Error('Logistic dimension invalid.'));
+    return Promise.reject(Error('Logistic dimension update invalid'));
   }
 
   return solarData.updateSolarComponent({
@@ -102,18 +135,27 @@ const updateSolarComponent = async ({
 
 }
 
-const deleteSolarComponent = ({ solarComponentId }) => solarData.deleteSolarComponent({ solarComponentId });
+const deleteSolarComponent = ({ solarComponentId }) => {
+  if(!hasValidSolarInput({ solarComponentId })){
+    return Promise.reject(Error('Invalid delete component inputs'));
+  }
+
+  return solarData.deleteSolarComponent({ solarComponentId })
+};
 
 const getSolarComponents = async ({ userId }) => {
+
+  if(!hasValidSolarInput({ userId })){
+    return Promise.reject(Error('Invalid get components inputs'));
+  }
 
   let components = null;
 
   try {
     components = await solarData.getSolarComponents({ userId })
   } catch (error) {
-    return Promise.reject(Error('Logistic dimension invalid.'));
+    return Promise.reject(Error('Not found components'));
   }
-
 
   const completeComponents = components.map(async (component) => {
     const response = await solarData
@@ -138,6 +180,10 @@ const getSolarComponents = async ({ userId }) => {
 
   return { solarComponents: await Promise.all(completeComponents)};
 };
+
+const hasValidSolarInput = (values) => {
+  return !Object.values(values).some(el => !el);
+}
 
 module.exports = {
   createSolarComponent,

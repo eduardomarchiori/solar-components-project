@@ -1,34 +1,45 @@
 <template>
   <div class="flex flex-col justify-center items-center">
+    <Toaster :toaster="toaster" />
     <div class="p-4 flex flex-col bg-white rounded-md w-3/12">
       <label for="" class="mb-1">Nome</label>
       <input v-model="name" type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md">
       <label for="" class="mb-1">Email</label>
       <input v-model="email" type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md">
       <label for="" class="mb-1">Senha</label>
-      <input v-model="password" type="password" class="mb-2 bg-gray-100 py-1 px-2 rounded-md">
-      <button @click="signup" class="mt-4 bg-green-500 py-1 px-2 rounded-md mx-2 text-white w-2/3 self-center">Criar</button>
+      <input v-model="password" type="password" class="bg-gray-100 py-1 px-2 rounded-md">
+      <RouterLink :to="{name: 'Signin'}" class="text-sm text-center my-8">Ja possui uma conta? Acesse agora!</RouterLink>
+      <button :disabled="!isValidForm" :class="{'cursor-not-allowed': !isValidForm}" @click="signup" class="bg-green-500 py-1 px-2 rounded-md mx-2 text-white w-2/3 self-center">Criar</button>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, ref, onMounted, watch, toRefs } from 'vue'
+import { computed, ref, onMounted } from 'vue';
 import * as authenticationService from '../../services/authentication/authenticationService';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
+import { setCookie } from '../../services/common/cookie';
+import useAuth from '../../use/useAuth';
+import Toaster from '../common/Toaster.vue';
 
 export default {
+  components: {
+    Toaster
+  },
   setup(props, context) {
 
     const router = useRouter();
+    const { setUser } = useAuth();
+    const toaster = ref(null);
 
     onMounted(() => {
-      context.emit('change-bg', 'bg-primary')
+      context.emit('change-bg', 'bg-primary');
     })
 
     const name = ref('');
     const email = ref('');
     const password = ref('');
+    const isValidForm = computed(() => email.value && password.value && name.value);
 
     const signup = async () => {
       try {
@@ -38,9 +49,25 @@ export default {
           password: password.value
         });
 
-        router.push({name: 'Signin'});
-      } catch (error) {
-        console.log(error);
+        const response = await authenticationService.signin({ 
+          email: email.value, 
+          password: password.value
+        });
+        setCookie({ accessToken: response.accessToken });
+        setUser({ 
+          id: response.user.userId,
+          name: response.user.name,
+          email: response.user.email,
+        });
+        
+        router.push({name: 'Home'});
+      } catch (e) {
+        const { error, content } = e.response.data;
+        toaster.value = {
+          type: 'error',
+          title: error,
+          message: content
+        }
       }
     }
 
@@ -49,6 +76,8 @@ export default {
       email,
       password,
       signup,
+      toaster,
+      isValidForm
     }
   },
 }
