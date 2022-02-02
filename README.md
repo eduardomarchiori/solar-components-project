@@ -32,7 +32,9 @@ Para rodar esse projeto, você vai precisar adicionar a seguinte variável de am
 `ACCESS_TOKEN_SECRET`
 
 ## Ambiente testado
+
 Sistema operacional: Linux e Windows
+
 Navegador: Google Chrome e Edge
 
 ## Para rodar Localmente
