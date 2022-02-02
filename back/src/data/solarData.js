@@ -68,7 +68,6 @@ const updateSolarComponent = ({
 }
 
 const updateLogisticsDimensionsSolarComponents = ({ logisticDimensionId, height, width, depth  }) => {
-  console.log(logisticDimensionId, height, depth, width);
   return db.query(`update logistics_dimensions set height = $1, width = $2, depth = $3, updated_at = $4
     where logistic_dimension_id = $5`, [ height, width, depth, new Date().toISOString(), logisticDimensionId ]);
 }

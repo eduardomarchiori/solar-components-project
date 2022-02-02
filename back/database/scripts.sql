@@ -1,6 +1,6 @@
 CREATE TABLE users (
 	user_id UUID NOT NULL PRIMARY KEY,
-  name VARCHAR ( 100 ) UNIQUE NOT NULL,
+  name VARCHAR ( 100 ) NOT NULL,
 	email VARCHAR ( 100 ) UNIQUE NOT NULL,
 	password VARCHAR ( 100 ) NOT NULL,
 	created_at TIMESTAMP NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE users (
 
 CREATE TABLE solar_components (
 	solar_component_id UUID NOT NULL PRIMARY KEY,
-  name VARCHAR ( 100 ) unique NOT NULL,
+  name VARCHAR ( 100 ) NOT NULL,
 	gtim VARCHAR ( 200 ) NOT NULL,
 	sector VARCHAR ( 10 ) NOT NULL,
 	component_group VARCHAR ( 20 ) NOT NULL,

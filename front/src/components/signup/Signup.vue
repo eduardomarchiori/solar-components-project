@@ -42,6 +42,18 @@ export default {
     const isValidForm = computed(() => email.value && password.value && name.value);
 
     const signup = async () => {
+
+      const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      if(!emailRegex.test(email.value)){
+        toaster.value = {
+          type: 'error',
+          title: 'E-mail inválido',
+          message: 'Por favor, verifique se seu e-mail está correto.'
+        }
+        return;
+      }
+
       try {
         await authenticationService.signup({ 
           name: name.value, 

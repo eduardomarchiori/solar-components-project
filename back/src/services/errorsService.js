@@ -51,6 +51,10 @@ const getError = (error) => {
     return buildError('Erro ao validar sessão', 'Por favor, verifique se as informações preenchidas estão corretas.');
   }
 
+  if(error === 'Invalid email input'){
+    return buildError('E-mail inválido', 'Por favor, verifique se seu e-mail está correto.');
+  }
+
   return buildError('Ocorreu um erro', 'Por favor, tente conectar novamente mais tarde.');
 }
 

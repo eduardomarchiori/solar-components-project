@@ -5,6 +5,10 @@ const userService = require('./userService');
 
 const singin = async ({ email, password }) => {
 
+  if(!hasValidEmail(email)){
+    return Promise.reject(Error('Invalid email input'));
+  }
+
   if(!hasValidAuthInput({ email, password })){
     return Promise.reject(Error('Invalid signin inputs'));
   }
@@ -34,6 +38,10 @@ const singin = async ({ email, password }) => {
 
 const signup = async ({ name, email, password }) => {
 
+  if(!hasValidEmail(email)){
+    return Promise.reject(Error('Invalid email input'));
+  }
+
   if(!hasValidAuthInput({ name, email, password })){
     return Promise.reject(Error('Invalid signup inputs'));
   }
@@ -49,6 +57,12 @@ const signup = async ({ name, email, password }) => {
 
 const hasValidAuthInput = (values) => {
   return !Object.values(values).some(el => !el);
+}
+
+const hasValidEmail = (email) => {
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  return emailRegex.test(email);
 }
 
 module.exports = {

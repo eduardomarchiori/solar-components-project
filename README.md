@@ -83,6 +83,107 @@ Instale as dependências do projeto e rode localmente (back)
   npm run start
 ```
 
+
+## Utilização API
+**Rotas autenticação:**
+
+[POST] Signin: /api/signin
+
+Payload: 
+
+```json
+Body
+
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+[POST] Signup: /api/signup
+
+Payload: 
+
+```json
+Body
+
+{
+  "name": "string",
+  "email": "string",
+  "password": "string"
+}
+```
+
+**Rotas componente solar (autenticada):**
+
+[GET] Listagem: /api/solar-component
+
+[POST] Criação: /api/solar-component
+
+Payload: 
+
+```json
+Body
+
+{
+  "name": "string",
+  "gtim": "string",
+  "sector": "string",
+  "group": "string",
+  "grossWeight": "float",
+  "netWeight": "float",
+  "height": "float",
+  "width": "float",
+  "depth": "float"
+}
+```
+
+[DELETE] Remoção: /api/solar-component/:id
+
+[PUT] Alteração: /api/solar-component
+
+Payload: 
+
+```json
+Body
+
+{
+  "logisticDimensionId": "uuid",
+  "solarComponentId": "uuid",
+  "name": "string",
+  "gtim": "string",
+  "sector": "string",
+  "group": "string",
+  "grossWeight": "float",
+  "netWeight": "float",
+  "height": "float",
+  "width": "float",
+  "depth": "float"
+}
+```
+
+[POST] Calculo cubagem: /api/solar-component/calculate
+
+Payload: 
+
+```json
+Body
+
+{
+  "components": [
+    {
+      "id": "string",
+      "quantidade": "int"
+    },
+    outros componentes...
+  ]
+}
+```
+
+**Rotas usuário (autenticada):**
+
+[GET] Obter: /api/user
+
 ## Stack utilizada
 
 **Front-End:** Vue 3.
@@ -95,7 +196,8 @@ Instale as dependências do projeto e rode localmente (back)
 ![alt text](/utilizacao.gif "Apresentação projeto")
 
 ## Próximos passos
-- Fazer front-end resposivo;
+- Fazer front-end responsivo;
 - Sepapração de regras de negócio em microserviços separados, ou seja, um microserviço para autenticação com seu próprio banco de dados e outro para regras relacionadas a componentes solares sobre a mesma estrutura;
+- Swagger
 - Melhorar componetização;
 - Criação de testes unitários.
