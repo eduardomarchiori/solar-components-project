@@ -208,7 +208,6 @@ Body
 ![alt text](/utilizacao.gif "Apresentação projeto")
 
 ## Próximos passos
-- Fazer front-end responsivo;
 - Sepapração de regras de negócio em microserviços separados, ou seja, um microserviço para autenticação com seu próprio banco de dados e outro para regras relacionadas a componentes solares sobre a mesma estrutura;
 - Swagger
 - Melhorar componetização;

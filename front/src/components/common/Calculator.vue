@@ -2,10 +2,10 @@
   <section class="bg-green-100">
     <Toaster :toaster="toaster" />
     <div class="flex justify-center py-20">
-      <div class="w-9/12 text-center flex flex-col items-center">
+      <div class="w-10/12 lg:w-9/12 text-center flex flex-col items-center">
         <h2 class="text-2xl color-primary font-bold mb-2">Calculadora</h2>
         <span class="text-md">Calcule a cubagem dos seus componentes agora mesmo.</span>
-        <div class="flex flex-col p-2 mt-8 w-2/3">
+        <div class="flex flex-col p-2 mt-8 w-full lg:w-9/12">
           <Multiselect class="mb-8"
             noResultsText="Não há items para serem selecionados"
             ref="multiselect"
@@ -22,19 +22,19 @@
               </template>
           </Multiselect>
           <div class="flex flex-col items-start mb-4">
-            <div v-for="component in componentsSelected" :key="component.id">
-              <div class="inline-flex justify-center px-2 py-2 mr-4 w-/12 font-bold leading-none text-white bg-primary rounded-md mb-4 w-40 cursor-pointer" @click="removeSelected(component)">
+            <div class="flex mb-4 w-full md:w-6/12" v-for="component in componentsSelected" :key="component.id">
+              <div class="flex items-center justify-center px-2 mr-4 h-full font-bold leading-none text-white bg-primary rounded-md mb-4 w-6/12 md:w-40 cursor-pointer" @click="removeSelected(component)">
                 <span class="truncate">
                 {{ getSelectedById(component).name }}
                 </span>
               </div>
-              <input type="number" placeholder="Quantidade..." class="px-2 rounded-md py-1" v-model="getSelectedById(component).quantity">
+              <input type="number" placeholder="Quantidade..." class="px-2 rounded-md w-6/12" v-model="getSelectedById(component).quantity">
             </div>
           </div>
-          <div class="flex">
+          <div class="flex flex-col md:flex-row">
             <div>
               <button 
-                class="bg-white text-green-600 mr-4 rounded-md text-md w-40 h-32 hover:bg-green-500 hover:text-white"
+                class="bg-white text-green-600 mr-4 rounded-md text-md w-full md:w-40 mb-8 md:mb-0 h-32 hover:bg-green-500 hover:text-white"
                 :class="{ 'cursor-not-allowed': !isValidCalculation }"
                 :disabled="!isValidCalculation"
                 @click="calculate">Calcular</button>
@@ -49,7 +49,7 @@
                 <span class="font-bold text-3xl color-primary">{{result?.pesoBruto || 0}}</span>
               </div>
               <div class="flex flex-col justify-center items-center">
-                <span>Peso líquido</span>
+                <span class="truncate">Peso líquido</span>
                 <span class="font-bold text-3xl color-primary">{{result?.pesoLiquido || 0}}</span>
               </div>
             </div>

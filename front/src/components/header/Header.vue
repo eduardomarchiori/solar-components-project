@@ -1,6 +1,6 @@
 <template>
   <header class="flex justify-center">
-    <div class="flex justify-between w-8/12 my-4">
+    <div class="flex justify-between w-10/12 md:w-8/12 my-4">
       <div>
         <img src="../../assets/images/logo.png" class="w-auto h-12 rounded-lg mb-1"/>
       </div>

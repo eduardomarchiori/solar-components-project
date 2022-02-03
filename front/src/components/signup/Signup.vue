@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-center items-center">
     <Toaster :toaster="toaster" />
-    <div class="p-4 flex flex-col bg-white rounded-md w-3/12">
+    <div class="p-4 flex flex-col bg-white rounded-md w-8/12 md:w-6/12 lg:w-3/12">
       <label for="" class="mb-1">Nome</label>
       <input v-model="name" type="text" class="mb-2 bg-gray-100 py-1 px-2 rounded-md">
       <label for="" class="mb-1">Email</label>

@@ -19,51 +19,80 @@
       :modalVisible="modalVisible" />
     <Toaster :toaster="toaster" />
     <div class="flex justify-center py-20">
-      <div class="w-9/12 text-center flex flex-col items-center">
+      <div class="w-10/12 lg:w-8/12 text-center flex flex-col items-center">
         <h2 class="text-2xl text-white font-bold mb-2">Lista de componentes</h2>
         <span class="text-md text-white">Crie, edite e exclua seus items rapidamente.</span>
-        <div class="flex p-2 mt-8 w-2/3">
+        <div class="flex md:p-2 mt-8 w-full md:w-2/3">
           <div class="w-10/12">
             <input v-model="filtred" type="text" class="w-full p-1 rounded-md mr-4" placeholder="Pesquiser por nome ou grupo...">
           </div>
-          <div class="w-2/12 ml-4">
+          <div class="w-3/12 md:w-2/12 ml-4">
             <button class="bg-white text-green-600 py-1 px-2 rounded-md text-md w-full" @click="create">Criar</button>
           </div>
         </div>
-        <div v-if="componentsBySearch.length" class="mt-8 text-left bg-white rounded-lg p-2 w-full">
-          <div class="flex justify-between p-2 my-2">
-            <div class="w-8/12 grid grid-cols-4 gap-4">
-              <span>Nome</span>
-              <span>GTIM</span>
-              <span>Tipo de Segmento</span>
-              <span>Grupo de Componentes</span>
+        <div class="w-full hidden md:block">
+          <div v-if="componentsBySearch.length" class="mt-8 text-left bg-white rounded-lg p-2 w-full">
+            <div class="flex justify-between p-2 my-2">
+              <div class="w-8/12 grid grid-cols-4 gap-4">
+                <span>Nome</span>
+                <span>GTIM</span>
+                <span>Tipo de Segmento</span>
+                <span>Grupo de Componentes</span>
+              </div>
+              <div class="w-4/12"></div>
             </div>
-            <div class="w-4/12"></div>
+            
+            <div class="flex justify-between p-2" v-for="component in componentsFiltred" :key="component.id">
+              <div class="w-8/12 grid grid-cols-4 gap-4">
+                <span>{{component.name}}</span>
+                <span>{{component.gtim}}</span>
+                <span>{{component.sector}}</span>
+                <span>{{component.group}}</span>
+              </div>
+              <div class="w-4/12 text-right">
+                <button class="bg-green-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="view(component)">
+                  <fa-icon icon="eye"/>
+                </button>
+                <button class="bg-blue-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="edit(component)">
+                  <fa-icon icon="pencil-alt"/>
+                </button>
+                <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.id)">
+                  <fa-icon icon="trash-alt"/>
+                </button>
+              </div>
+            </div>
           </div>
-          
-          <div class="flex justify-between p-2" v-for="component in componentsFiltred" :key="component.id">
-            <div class="w-8/12 grid grid-cols-4 gap-4">
-              <span>{{component.name}}</span>
-              <span>{{component.gtim}}</span>
-              <span>{{component.sector}}</span>
-              <span>{{component.group}}</span>
-            </div>
-            <div class="w-4/12 text-right">
-              <button class="bg-green-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="view(component)">
-                <fa-icon icon="eye"/>
-              </button>
-              <button class="bg-blue-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="edit(component)">
-                <fa-icon icon="pencil-alt"/>
-              </button>
-              <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.id)">
-                <fa-icon icon="trash-alt"/>
-              </button>
-            </div>
+          <div v-else class="flex flex-col items-center justify-center mt-8">  
+            <img src="../../assets/images/sad.png" alt="not found" class="w-28 mb-6">
+            <span class="text-white">Nenhum resultado foi encontrado.</span>
           </div>
         </div>
-        <div v-else class="flex flex-col items-center justify-center mt-8">  
-          <img src="../../assets/images/sad.png" alt="not found" class="w-28 mb-6">
-          <span class="text-white">Nenhum resultado foi encontrado.</span>
+        <div class="w-full md:hidden">
+          <div v-if="componentsBySearch.length">
+            <div class="w-full mt-8" v-for="component in componentsFiltred" :key="component.id">
+              <div class="flex flex-col bg-white rounded-md text-left p-4">
+                <span class="mb-2">Nome: {{component.name}}</span>
+                <span class="mb-2">GTIM: {{component.gtim}}</span>
+                <span class="mb-2">Segmento: {{component.sector}}</span>
+                <span class="mb-2">Grupo: {{component.group}}</span>
+                <div class="mt-6 flex justify-center">
+                  <button class="bg-green-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="view(component)">
+                    Visualizar
+                  </button>
+                  <button class="bg-blue-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="edit(component)">
+                    Editar
+                  </button>
+                  <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.id)">
+                    Excluir
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div v-else class="flex flex-col items-center justify-center mt-8">  
+            <img src="../../assets/images/sad.png" alt="not found" class="w-28 mb-6">
+            <span class="text-white">Nenhum resultado foi encontrado.</span>
+          </div>
         </div>
       </div>
     </div>
