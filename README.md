@@ -97,104 +97,10 @@ Instale as dependências do projeto e rode localmente (back)
 
 
 ## Utilização API
-**Rotas autenticação:**
 
-[POST] Signin: /api/signin
+Documentação feito com **Swagger API**.
 
-Payload: 
-
-```json
-Body
-
-{
-  "email": "string",
-  "password": "string"
-}
-```
-
-[POST] Signup: /api/signup
-
-Payload: 
-
-```json
-Body
-
-{
-  "name": "string",
-  "email": "string",
-  "password": "string"
-}
-```
-
-**Rotas componente solar (autenticada):**
-
-[GET] Listagem: /api/solar-component
-
-[POST] Criação: /api/solar-component
-
-Payload: 
-
-```json
-Body
-
-{
-  "name": "string",
-  "gtim": "string",
-  "sector": "string",
-  "group": "string",
-  "grossWeight": "float",
-  "netWeight": "float",
-  "height": "float",
-  "width": "float",
-  "depth": "float"
-}
-```
-
-[DELETE] Remoção: /api/solar-component/:id
-
-[PUT] Alteração: /api/solar-component
-
-Payload: 
-
-```json
-Body
-
-{
-  "logisticDimensionId": "uuid",
-  "solarComponentId": "uuid",
-  "name": "string",
-  "gtim": "string",
-  "sector": "string",
-  "group": "string",
-  "grossWeight": "float",
-  "netWeight": "float",
-  "height": "float",
-  "width": "float",
-  "depth": "float"
-}
-```
-
-[POST] Calculo cubagem: /api/solar-component/calculate
-
-Payload: 
-
-```json
-Body
-
-{
-  "components": [
-    {
-      "id": "string",
-      "quantidade": "int"
-    },
-    outros componentes...
-  ]
-}
-```
-
-**Rotas usuário (autenticada):**
-
-[GET] Obter: /api/user
+Ao executar o serviço de back-end, acessar rota: [Eduardo Marchiori](http://localhost:5003/documentation/)
 
 ## Stack utilizada
 
