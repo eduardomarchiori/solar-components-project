@@ -100,7 +100,7 @@ Instale as dependências do projeto e rode localmente (back)
 
 Documentação feita com **Swagger API**.
 
-Ao executar o serviço de back-end, acessar rota: [Eduardo Marchiori](http://localhost:5003/documentation/)
+Ao executar o serviço de back-end, acessar a rota: [http://localhost:5003/documentation/](http://localhost:5003/documentation/)
 
 ## Stack utilizada
 
