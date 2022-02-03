@@ -12,8 +12,8 @@ const calculateCubage = async (components) => {
   let totalNetWeight = 0;
 
   for (const component of components) {
-    const componentsResult = await solarData.getSolarComponent({ solarComponentId: component.id  })
-    const findedComponent = componentsResult.find(el => el['solar_component_id'] === component.id);
+    const componentsResult = await solarData.getSolarComponent({ solarComponentId: component.solarComponentId  })
+    const findedComponent = componentsResult.find(el => el['solar_component_id'] === component.solarComponentId);
     const logisticsDimensions =  await solarData.getLogisticsDimensionsSolarComponents({ 
       logisticDimensionId: findedComponent['logistic_dimension_id'] 
     });
@@ -164,7 +164,7 @@ const getSolarComponents = async ({ userId }) => {
     const [ logisticsDimensions ] = response;
 
     return {
-      id: component['solar_component_id'],
+      solarComponentId: component['solar_component_id'],
       logisticDimensionId: component['logistic_dimension_id'],
       name: component.name, 
       gtim: component.gtim,

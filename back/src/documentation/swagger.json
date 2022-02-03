@@ -1,0 +1,465 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Cenergy",
+    "description": "Essa API tem como objetivo manipular autenticação e componentes solares.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5003/api",
+      "description": "API de test"
+    }
+  ],
+  "paths": {
+    "/signup": {
+      "post": {
+        "sumary": "Criação de acesso",
+        "description": "Rota utilizada para criar usuário.",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Cadastro"
+              },
+              "examples": {
+                "cadastro":{
+                  "value": {
+                    "name": "João",
+                    "email": "joao@gmail.com",
+                    "password": "@senha123"
+                  }  
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      }
+    },
+    "/signin": {
+      "post": {
+        "sumary": "Início de acesso",
+        "description": "Rota utilizada para acessar usuário.",
+        "tags": ["Autenticação"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Acesso"
+              },
+              "examples": {
+                "cadastro":{
+                  "value": {
+                    "email": "joao@gmail.com",
+                    "password": "@senha123"
+                  }  
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "user": {
+                      "type": "object",
+                      "properties":{
+                        "userId": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "sumary": "Obtenção de dados do usuário",
+        "description": "Rota utilizada para obter informações do usuário.",
+        "tags": ["Usuário"],
+        "security": [{"ApiKeyAuth": []}],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "user": {
+                      "type": "object",
+                      "properties":{
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      }
+    },
+    "/solar-component": {
+      "get": {
+        "sumary": "Obtenção de componentes solares do usuário",
+        "description": "Rota utilizada para listagem de componentes solares do usuário.",
+        "tags": ["Solar"],
+        "security": [{"ApiKeyAuth": []}],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref":  "#/components/schemas/ComponenteSolarCompleted"
+                  }                  
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "sumary": "Criação de componente solar do usuário",
+        "description": "Rota utilizada para criação de componente solar do usuário.",
+        "tags": ["Solar"],
+        "security": [{"ApiKeyAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComponenteSolar"
+              },
+              "examples": {
+                "cadastro componente":{
+                  "value": {
+                    "name": "Cabo magnético",
+                    "gtim": "123456789",
+                    "sector": "ongrid",
+                    "group": "cabo",
+                    "grossWeight": "10",
+                    "netWeight": "8",
+                    "height": "1",
+                    "width": "1",
+                    "depth": "50"
+                  }  
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Error: Unauthorized"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "sumary": "Alteração de componente solar do usuário",
+        "description": "Rota utilizada para alteração de componente solar do usuário.",
+        "tags": ["Solar"],
+        "security": [{"ApiKeyAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComponenteSolarCompleted"
+              },
+              "examples": {
+                "cadastro componente":{
+                  "value": {
+                    "solarComponentId": "e8a0dc19-5634-4aef-ab39-6a69bbfc82f5",
+                    "logisticDimensionId": "e8a0dc19-5634-4aef-ab39-6a69bbfc82f5",
+                    "name": "Cabo magnético",
+                    "gtim": "123456789",
+                    "sector": "ongrid",
+                    "group": "cabo",
+                    "grossWeight": "10",
+                    "netWeight": "8",
+                    "height": "1",
+                    "width": "1",
+                    "depth": "50"
+                  }  
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Error: Unauthorized"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      }
+    },
+    "/solar-component/{id}": {
+      "delete": {
+        "sumary": "Remoção de componente solar do usuário",
+        "description": "Rota utilizada para remoção de componente solar do usuário.",
+        "tags": ["Solar"],
+        "security": [{"ApiKeyAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id do componente para remoção",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Error: Unauthorized"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      }
+    },
+    "/solar-component/calculate": {
+      "post": {
+        "sumary": "Calculo para calculo da cubagem",
+        "description": "Rota utilizada para calcular cubagem dos componentes solares.",
+        "tags": ["Solar"],
+        "security": [{"ApiKeyAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties":{
+                  "components": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {                  
+                        "solarComponentId": {
+                          "type": "string"
+                        },
+                        "quantidade": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "components": [
+                  {
+                    "solarComponentId": "e8a0dc19-5634-4aef-ab39-6a69bbfc82f5",
+                    "quantidade": 2
+                  },
+                  {
+                    "solarComponentId": "e8a0dc19-5634-4aef-ab39-6a69bbfc82f5",
+                    "quantidade": 4
+                  }
+                ] 
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "cubagem": {
+                      "type": "number"
+                    },
+                    "pesoBruto": {
+                      "type": "number"
+                    },
+                    "pesoLiquido": {
+                      "type": "number"
+                    }
+                  }                
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error: Unauthorized"
+          },
+          "500": {
+            "description": "Error: Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Cadastro": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Acesso": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "ComponenteSolar": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "gtim": {
+            "type": "string"
+          },
+          "sector": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "grossWeight": {
+            "type": "number"
+          },
+          "netWeight": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "width": {
+            "type": "number"
+          },
+          "depth": {
+            "type": "number"
+          }
+        }
+      },
+      "ComponenteSolarCompleted": {
+        "type": "object",
+        "properties": {
+          "logisticDimensionId": {
+            "type": "string"
+          },
+          "solarComponentId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "gtim": {
+            "type": "string"
+          },
+          "sector": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "grossWeight": {
+            "type": "number"
+          },
+          "netWeight": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          },
+          "width": {
+            "type": "number"
+          },
+          "depth": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-authorization"
+      }
+    }
+  }
+}

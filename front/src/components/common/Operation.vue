@@ -42,7 +42,7 @@
               <div class="w-4/12"></div>
             </div>
             
-            <div class="flex justify-between p-2" v-for="component in componentsFiltred" :key="component.id">
+            <div class="flex justify-between p-2" v-for="component in componentsFiltred" :key="component.solarComponentId">
               <div class="w-8/12 grid grid-cols-4 gap-4">
                 <span>{{component.name}}</span>
                 <span>{{component.gtim}}</span>
@@ -56,7 +56,7 @@
                 <button class="bg-blue-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="edit(component)">
                   <fa-icon icon="pencil-alt"/>
                 </button>
-                <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.id)">
+                <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.solarComponentId)">
                   <fa-icon icon="trash-alt"/>
                 </button>
               </div>
@@ -69,7 +69,7 @@
         </div>
         <div class="w-full md:hidden">
           <div v-if="componentsBySearch.length">
-            <div class="w-full mt-8" v-for="component in componentsFiltred" :key="component.id">
+            <div class="w-full mt-8" v-for="component in componentsFiltred" :key="component.solarComponentId">
               <div class="flex flex-col bg-white rounded-md text-left p-4">
                 <span class="mb-2">Nome: {{component.name}}</span>
                 <span class="mb-2">GTIM: {{component.gtim}}</span>
@@ -82,7 +82,7 @@
                   <button class="bg-blue-500 py-1 px-2 rounded-md text-md mx-2 text-white" @click="edit(component)">
                     Editar
                   </button>
-                  <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.id)">
+                  <button class="bg-red-500 py-1 px-2 rounded-md mx-2 text-white" @click="remove(component.solarComponentId)">
                     Excluir
                   </button>
                 </div>
@@ -192,7 +192,7 @@ export default {
       isEdition.value = true;
       modalVisible.value = true;
 
-      solarComponentId.value = component.id;
+      solarComponentId.value = component.solarComponentId;
       logisticDimensionId.value = component.logisticDimensionId;
       name.value = component.name;
       gtim.value = component.gtim;

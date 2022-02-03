@@ -22,7 +22,7 @@
               </template>
           </Multiselect>
           <div class="flex flex-col items-start mb-4">
-            <div class="flex mb-4 w-full md:w-6/12" v-for="component in componentsSelected" :key="component.id">
+            <div class="flex mb-4 w-full md:w-6/12" v-for="component in componentsSelected" :key="component.solarComponentId">
               <div class="flex items-center justify-center px-2 mr-4 h-full font-bold leading-none text-white bg-primary rounded-md mb-4 w-6/12 md:w-40 cursor-pointer" @click="removeSelected(component)">
                 <span class="truncate">
                 {{ getSelectedById(component).name }}
@@ -83,19 +83,19 @@ export default {
     const result = ref(null);
     const toaster = ref(null);
 
-    const componentsMapped = computed(() => components.values.map(({ id, name }) => ({
+    const componentsMapped = computed(() => components.values.map(({ solarComponentId, name }) => ({
       label: name,
-      value: id
+      value: solarComponentId
     })));
 
     const calculate = async () => {
       const selecteds = components.values.filter((el) =>{
-        return componentsSelected.value.find((selected) => selected === el.id);
+        return componentsSelected.value.find((selected) => selected === el.solarComponentId);
       })
 
       try {
        result.value = await solarService.calculateCubage({
-        components: selecteds.map(({ id, quantity }) => ({ id, quantidade: quantity }))
+        components: selecteds.map(({ solarComponentId, quantity }) => ({ solarComponentId, quantidade: quantity }))
        });
       } catch (e) {
         const { error, content } = e.response.data;
@@ -107,12 +107,12 @@ export default {
       }
     }
 
-    const getSelectedById = (id) => components.values.find(el => el.id === id);
+    const getSelectedById = (id) => components.values.find(el => el.solarComponentId === id);
 
     const removeSelected = (id) => {
       const selected = getSelectedById(id);
       selected.quantity = null;
-      multiselect.value.remove(selected.id);
+      multiselect.value.remove(selected.solarComponentId);
     }
 
     const clear = () => {

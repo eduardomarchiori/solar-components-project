@@ -18,6 +18,7 @@
     "pg-hstore": "^2.3.4",
     "pg-promise": "^10.11.1",
     "sequelize": "^6.15.0",
+    "swagger-ui-express": "^4.3.0",
     "uuid": "^8.3.2"
   }
 }
