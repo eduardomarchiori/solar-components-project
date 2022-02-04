@@ -23,7 +23,7 @@ A aplicação deve respeitar os seguintes requisitos técnicos:
 
 - Node (versão utilizada 16.13.2)
 - Docker
-- docker-compose
+- docker-compose (versão utilizada 1.29.2)
 
 ## Variáveis de Ambiente
 
